@@ -15,7 +15,9 @@ var img=document.createElement("img");
 img.src="img/img-"+i+".jpg";
 img.addEventListener("click", function() {
        canvas.loadImage(this);
-       console.log(canvas.getPixelData());
+       var data = canvas.getPixelData();
+      canvas.greyScale(data);
+       
     });
 	
 

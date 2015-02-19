@@ -5,12 +5,12 @@
       }
    },
    "icons": {
-      "128": "icon_128.png",
-      "16": "icon_16.png"
+      "64": "icon_128.png"
+     
    },
   
    
-   "name": "Hello World",
+   "name": "Image Processing",
   
-   "version": "2.1"
+   "version": "0.1"
 }

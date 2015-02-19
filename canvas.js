@@ -29,5 +29,19 @@ Canvas.prototype.loadImage=function(img){
 Canvas.prototype.getPixelData=function(){
 
 return this.ctx.getImageData(0,0,this.canvas.width,this.canvas.height);
+  
 
-};
+}
+
+Canvas.prototype.greyScale=function(imgPixels){
+
+var px_data= imgPixels.data;
+  for(var i = 0; i<px_data.length; i=i+4){  
+        
+            var avg = (0.3*px_data[i] + 0.59*px_data[i + 1] + 0.11*px_data[i + 2]);  
+            px_data[i] = px_data[i + 1] = px_data[i + 2] = avg;  
+        }  
+    this.ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+
+
+}
