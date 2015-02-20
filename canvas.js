@@ -45,3 +45,26 @@ var px_data= imgPixels.data;
 
 
 }
+
+Canvas.prototype.avgColor=function(imgPixels,targetElement){
+var r=0;
+var g=0;
+var b=0;
+var count=0;
+
+var px_data= imgPixels.data;
+  for(var i = 0; i<px_data.length; i=i+4*10){  
+        
+            count++;
+           r=  r+px_data[i];
+           g=  g+ px_data[i + 1] ;
+           b=  b+ px_data[i + 2]  ;  
+        }  
+console.log(r,g,b);
+
+r=Math.floor(r/count);
+g=Math.floor(g/count);
+b=Math.floor(b/count);
+
+targetElement.style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+}

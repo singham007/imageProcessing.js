@@ -10,14 +10,14 @@ document.body.appendChild(grid);
 
 canvas.loadImageFromPath("img/img-1.jpg");
 
-for(var i=1;i<9;i++){
+for(var i=0;i<9;i++){
 var img=document.createElement("img");
 img.src="img/img-"+i+".jpg";
 img.addEventListener("click", function() {
        canvas.loadImage(this);
        var data = canvas.getPixelData();
-      canvas.greyScale(data);
-       
+    //  canvas.greyScale(data);
+       canvas.avgColor(data,document.body)
     });
 	
 
