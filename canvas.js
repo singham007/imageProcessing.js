@@ -60,11 +60,47 @@ var px_data= imgPixels.data;
            g=  g+ px_data[i + 1] ;
            b=  b+ px_data[i + 2]  ;  
         }  
-console.log(r,g,b);
 
 r=Math.floor(r/count);
 g=Math.floor(g/count);
 b=Math.floor(b/count);
 
 targetElement.style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+
+
+Canvas.prototype.gausianBlur=function(imgPixels,value){
+
+
+
+var tmpPx= imgPixels.data;
+
+while(value--){
+
+
+
+  for(var i = 0,len=tmpPx.length; i<len; i++){  
+        
+            if (i % 4 === 3) {
+               continue;
+            }
+
+            tmpPx[i] = (tmpPx[i]
+               + (tmpPx[i - 4] || tmpPx[i])
+               + (tmpPx[i + 4] || tmpPx[i])
+               + (tmpPx[i - 4 * imgPixels.width] || tmpPx[i])
+               + (tmpPx[i + 4 * imgPixels.width] || tmpPx[i])
+               + (tmpPx[i + 4 * imgPixels.width + 4] || tmpPx[i])
+               + (tmpPx[i + 4 * imgPixels.width - 4] || tmpPx[i])
+               + (tmpPx[i - 4 * imgPixels.width + 4] || tmpPx[i])
+               + (tmpPx[i - 4 * imgPixels.width - 4] || tmpPx[i])
+               ) / 9;
+        }  
+
+    this.ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+
+
+  }
+
+
 }

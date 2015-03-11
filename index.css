@@ -32,3 +32,11 @@ canvas{
 	
 	margin:50px auto 10px;
 }
+
+#opt{
+	display:block;
+	left:600px;
+	bottom:80px;
+	position:fixed;
+	margin:10px auto;
+}
