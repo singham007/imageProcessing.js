@@ -72,8 +72,131 @@ targetElement.style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')';
 Canvas.prototype.gausianBlur=function(imgPixels,value){
 
 
+var kernel=
+[
+ 1 ,2, 1,
+ 2, 4, 2,
+ 1, 2, 1
+		];
 
-var tmpPx= imgPixels.data;
+imgPixels=conv(imgPixels,value,kernel);
+    this.ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+
+
+  }
+
+
+Canvas.prototype.boxBlur=function(imgPixels,value){
+
+
+var kernel=
+[
+ 1 ,1, 1,
+ 1, 1, 1,
+ 1, 1, 1
+		];
+
+imgPixels=conv(imgPixels,value,kernel);
+    this.ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+
+
+  }
+
+
+
+Canvas.prototype.sharpen=function(imgPixels,value){
+
+
+var kernel=
+[
+ 0 ,-1 , 0,
+-1 , 5 ,-1,
+ 0 ,-1 , 0
+		  ];
+
+imgPixels=conv(imgPixels,value,kernel);
+    this.ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+
+
+  }
+
+
+
+Canvas.prototype.edgeDetection1=function(imgPixels,value){
+
+
+var kernel=
+[
+ 0 , 1 , 0,
+ 1 ,-4 , 1,
+ 0 , 1 , 0
+		  ];
+
+imgPixels=conv(imgPixels,value,kernel);
+    this.ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+
+
+  }
+
+Canvas.prototype.edgeDetection2=function(imgPixels,value){
+
+
+var kernel=
+[
+ 1 , 0 ,-1,
+ 0 , 0 , 0,
+-1 , 0 , 1
+		  ];
+
+imgPixels=conv(imgPixels,value,kernel);
+    this.ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+
+
+  }
+
+
+
+Canvas.prototype.edgeDetection3=function(imgPixels,value){
+
+
+var kernel=
+[
+ -1 ,-1 , -1,
+ -1 , 8 , -1,
+ -1 ,-1 , -1
+		    ];
+ 
+imgPixels=conv(imgPixels,value,kernel);
+    this.ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+
+
+ }
+
+
+
+
+
+function conv(imgPixels, value,kernel ){
+
+//value =no. of times func to b applied
+
+var divider = 0;
+
+for (var i = 0, n = kernel.length; i < n; i++)
+{
+    divider += kernel[i];
+}
+
+if(divider === 0){
+	divider= 1;
+}
+
+var px= imgPixels.data;
+var tmpPx = new Uint8ClampedArray(px.length);
+tmpPx.set(px);
+
+
+
 
 while(value--){
 
@@ -85,22 +208,40 @@ while(value--){
                continue;
             }
 
-            tmpPx[i] = (tmpPx[i]
-               + (tmpPx[i - 4] || tmpPx[i])
-               + (tmpPx[i + 4] || tmpPx[i])
-               + (tmpPx[i - 4 * imgPixels.width] || tmpPx[i])
-               + (tmpPx[i + 4 * imgPixels.width] || tmpPx[i])
-               + (tmpPx[i + 4 * imgPixels.width + 4] || tmpPx[i])
-               + (tmpPx[i + 4 * imgPixels.width - 4] || tmpPx[i])
-               + (tmpPx[i - 4 * imgPixels.width + 4] || tmpPx[i])
-               + (tmpPx[i - 4 * imgPixels.width - 4] || tmpPx[i])
-               ) / 9;
+        px[i] = (
+        		 kernel[4]*(tmpPx[i])
+               + kernel[3]*(tmpPx[i - 4] || tmpPx[i])
+               + kernel[5]*(tmpPx[i + 4] || tmpPx[i])
+               + kernel[1]*(tmpPx[i - 4 * imgPixels.width] || tmpPx[i])
+               + kernel[7]*(tmpPx[i + 4 * imgPixels.width] || tmpPx[i])
+               + kernel[8]*(tmpPx[i + 4 * imgPixels.width + 4] || tmpPx[i])
+               + kernel[6]*(tmpPx[i + 4 * imgPixels.width - 4] || tmpPx[i])
+               + kernel[2]*(tmpPx[i - 4 * imgPixels.width + 4] || tmpPx[i])
+               + kernel[0]*(tmpPx[i - 4 * imgPixels.width - 4] || tmpPx[i])
+               ) / divider;
         }  
 
-    this.ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+   return imgPixels;
 
 
   }
 
 
+/*
+* Image matrix = [  
+*					tmpPx[i - 4 * imgPixels.width - 4] , tmpPx[i - 4 * imgPixels.width]  , tmpPx[i - 4 * imgPixels.width + 4]
+*
+*
+*					tmpPx[i - 4]                       ,  tmpPx[i]                       ,  tmpPx[i + 4]
+*
+*					
+*					tmpPx[i + 4 * imgPixels.width - 4] ,  tmpPx[i + 4 * imgPixels.width] ,  tmpPx[i + 4 * imgPixels.width + 4]
+*
+*															                                                                  ];
+*/
 }
+
+
+
+
+
